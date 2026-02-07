@@ -1,8 +1,6 @@
 ;;; -*- Gerbil -*-
 ;;; CLI entry point for gerbil-charts
-;;; Two modes:
-;;;   Single chart: gerbil-charts output.png < chart_data.json
-;;;   Dashboard:    gerbil-charts --dashboard --url URL --instance INST --output DIR
+;;; Render line charts from JSON data (reads from stdin)
 (export main)
 
 (import :std/cli/getopt
@@ -12,11 +10,9 @@
         :gerbil-charts/data
         :gerbil-charts/axis
         :gerbil-charts/layout
-        :gerbil-charts/charts/line
-        :gerbil-charts/prometheus
-        :gerbil-charts/dashboard)
+        :gerbil-charts/charts/line)
 
-;; Default color palette (matches prometheus.ss)
+;; Default color palette
 (def default-colors
   [[0.2 0.4 0.8]    ;; blue
    [0.8 0.2 0.2]    ;; red
@@ -97,53 +93,21 @@
                output width height bk
                (inexact->exact (floor (* elapsed 1000)))))))
 
-;; Run dashboard mode: query Prometheus and generate charts
-(def (run-dashboard opt)
-  (let-hash opt
-    (let ((url (or .?url (error "--url is required for dashboard mode")))
-          (instance (or .?instance (error "--instance is required for dashboard mode")))
-          (output-dir (or .?output "charts"))
-          (range (or .?range "24h"))
-          (prefix (or .?prefix #f))
-          (max-charts (or .?max 0))
-          (concurrency (or .?concurrency 20))
-          (bk (string->symbol (or .?backend "png")))
-          (width (or .?width 800))
-          (height (or .?height 400))
-          (step (or .?step "60s")))
-      (generate-dashboard url instance output-dir
-        range: range
-        prefix: prefix
-        max-charts: max-charts
-        concurrency: concurrency
-        backend: bk
-        width: width
-        height: height
-        step: step))))
-
 (def (main . args)
   (call-with-getopt
     (lambda (opt)
       (let-hash opt
-        (if .?dashboard
-          (run-dashboard opt)
-          (begin
-            (unless .?output-file
-              (error "Output filename required (positional argument)"))
-            (run-single-chart opt)))))
+        (unless .?output-file
+          (error "Output filename required (positional argument)"))
+        (run-single-chart opt)))
     args
     program: "gerbil-charts"
-    help: "Render line charts from JSON data or Prometheus metrics"
-    ;; Mode flag
-    (flag 'dashboard "--dashboard"
-      help: "Dashboard mode: query Prometheus and generate charts for all metrics")
-    ;; Single chart options
-    (optional-argument 'output-file
+    help: "Render line charts from JSON data (reads from stdin)"
+    (argument 'output-file
       help: "Output filename (e.g. output.svg, output.png)")
     (option 'title "--title" "-t"
       help: "Chart title (overrides JSON title)"
       default: #f)
-    ;; Shared options
     (option 'width "--width" "-W"
       help: "Chart width in pixels"
       value: string->number
@@ -154,31 +118,4 @@
       default: #f)
     (option 'backend "--backend" "-b"
       help: "Rendering backend: svg, png, pdf"
-      default: #f)
-    ;; Dashboard options
-    (option 'url "--url" "-u"
-      help: "Prometheus base URL (dashboard mode)"
-      default: #f)
-    (option 'instance "--instance" "-i"
-      help: "Prometheus instance label (dashboard mode)"
-      default: #f)
-    (option 'output "--output" "-o"
-      help: "Output directory (dashboard mode, default: charts)"
-      default: #f)
-    (option 'range "--range" "-r"
-      help: "Time range (e.g. 1h, 24h, 7d; dashboard mode, default: 24h)"
-      default: #f)
-    (option 'prefix "--prefix"
-      help: "Metric name prefix filter (dashboard mode)"
-      default: #f)
-    (option 'max "--max" "-m"
-      help: "Maximum number of charts (dashboard mode, 0=unlimited)"
-      value: string->number
-      default: #f)
-    (option 'concurrency "--concurrency" "-c"
-      help: "Concurrent chart generation limit (dashboard mode, default: 20)"
-      value: string->number
-      default: #f)
-    (option 'step "--step"
-      help: "Query step interval (dashboard mode, default: 60s)"
       default: #f)))

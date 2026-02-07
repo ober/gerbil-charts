@@ -1,7 +1,8 @@
 #!/usr/bin/env gxi
-(import :std/build-script)
+(import :std/build-script
+        :std/make)
 (defbuild-script
-  '("data"
+  `("data"
     "scale"
     "canvas"
     "canvas/svg"
@@ -14,7 +15,4 @@
     "charts/scatter"
     "charts/area"
     "charts"
-    "prometheus"
-    "dashboard"
-    "main"
-    (exe: "main" bin: "gerbil-charts")))
+    "main"))

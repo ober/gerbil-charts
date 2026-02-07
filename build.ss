@@ -15,4 +15,6 @@
     "charts/area"
     "charts"
     "prometheus"
-    "dashboard"))
+    "dashboard"
+    "main"
+    (exe: "main" bin: "gerbil-charts")))

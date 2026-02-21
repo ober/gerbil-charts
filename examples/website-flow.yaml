@@ -1,0 +1,144 @@
+# Website User Flow Example
+# Perfect for: user journeys, navigation flows, app wireflows
+#
+# This shows how users navigate through a website.
+
+type: digraph
+name: WebsiteFlow
+
+graph:
+  rankdir: TB
+  fontname: Arial
+
+defaults:
+  node:
+    shape: box
+    style: "filled,rounded"
+    fillcolor: white
+    fontname: Arial
+
+nodes:
+  # Entry points
+  - id: Home
+    label: "Home Page"
+    shape: oval
+    fillcolor: "#90EE90"    # Light green
+
+  - id: Search
+    label: "Search"
+    shape: oval
+    fillcolor: "#90EE90"
+
+  # Main pages
+  - id: ProductList
+    label: "Product List"
+    fillcolor: "#ADD8E6"    # Light blue
+
+  - id: ProductDetail
+    label: "Product Detail"
+    fillcolor: "#ADD8E6"
+
+  - id: Cart
+    label: "Shopping Cart"
+    fillcolor: "#FFD700"    # Gold
+
+  - id: Checkout
+    label: "Checkout"
+    fillcolor: "#FFD700"
+
+  # Account pages
+  - id: Login
+    label: "Login /\nSign Up"
+    fillcolor: "#DDA0DD"    # Plum
+
+  - id: Account
+    label: "My Account"
+    fillcolor: "#DDA0DD"
+
+  # End states
+  - id: OrderConfirm
+    label: "Order\nConfirmation"
+    shape: oval
+    fillcolor: "#98FB98"    # Pale green
+
+  - id: Exit
+    label: "Leave Site"
+    shape: oval
+    fillcolor: "#FFB6C1"    # Light pink
+
+edges:
+  # From home
+  - from: Home
+    to: ProductList
+    label: "browse"
+
+  - from: Home
+    to: Search
+    label: "search"
+
+  - from: Home
+    to: Login
+    label: "sign in"
+
+  # Product flow
+  - from: Search
+    to: ProductList
+    label: "results"
+
+  - from: ProductList
+    to: ProductDetail
+    label: "select"
+
+  - from: ProductDetail
+    to: Cart
+    label: "add to cart"
+
+  - from: ProductDetail
+    to: ProductList
+    label: "back"
+    style: dashed
+
+  # Cart flow
+  - from: Cart
+    to: Checkout
+    label: "proceed"
+
+  - from: Cart
+    to: ProductList
+    label: "continue\nshopping"
+    style: dashed
+
+  # Checkout flow
+  - from: Checkout
+    to: Login
+    label: "not logged in"
+    color: red
+
+  - from: Login
+    to: Checkout
+    label: "authenticated"
+    color: green
+
+  - from: Checkout
+    to: OrderConfirm
+    label: "complete"
+    color: green
+
+  # Account
+  - from: Login
+    to: Account
+    label: "success"
+
+  - from: Account
+    to: ProductList
+    label: "browse"
+
+  # Exit points
+  - from: OrderConfirm
+    to: Exit
+    label: "done"
+
+  - from: ProductList
+    to: Exit
+    label: "leave"
+    style: dotted

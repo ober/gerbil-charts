@@ -1,0 +1,84 @@
+# Simple Decision Flowchart Example
+# Perfect for: process flows, decision trees, approval workflows
+#
+# This example shows a simple approval process with decision points.
+# Non-technical users can easily modify:
+# - Node labels (the text shown)
+# - Colors (using common color names)
+# - Shapes (box, oval, diamond for decisions, cylinder for databases)
+# - Flow labels (text on arrows)
+
+type: digraph
+name: ApprovalProcess
+
+# Global settings
+graph:
+  rankdir: TB        # TB = Top to Bottom, LR = Left to Right
+  fontname: Arial
+  fontsize: 12
+
+# Default styling for all nodes
+defaults:
+  node:
+    fontname: Arial
+    fontsize: 11
+    style: filled,rounded
+    fillcolor: lightblue
+
+# The nodes in your flowchart
+nodes:
+  - id: Start
+    label: "Submit Request"
+    shape: oval
+    fillcolor: lightgreen
+
+  - id: Review
+    label: "Manager Review"
+    shape: box
+
+  - id: Approved
+    label: "Approved?"
+    shape: diamond
+    fillcolor: lightyellow
+
+  - id: Process
+    label: "Process Request"
+    shape: box
+
+  - id: Reject
+    label: "Send Rejection\nEmail"
+    shape: box
+    fillcolor: lightcoral
+
+  - id: Complete
+    label: "Request Complete"
+    shape: oval
+    fillcolor: lightgreen
+
+# The connections between nodes
+edges:
+  - from: Start
+    to: Review
+    label: "submit"
+
+  - from: Review
+    to: Approved
+    label: "evaluate"
+
+  - from: Approved
+    to: Process
+    label: "YES"
+    color: green
+
+  - from: Approved
+    to: Reject
+    label: "NO"
+    color: red
+
+  - from: Process
+    to: Complete
+    label: "done"
+
+  - from: Reject
+    to: Complete
+    label: "notify"

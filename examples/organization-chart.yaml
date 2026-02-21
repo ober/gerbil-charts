@@ -1,0 +1,103 @@
+# Organization Chart Example
+# Perfect for: team structures, reporting relationships, hierarchies
+#
+# This shows a simple company org chart.
+# Customize with your team's structure!
+
+type: digraph
+name: OrgChart
+
+graph:
+  rankdir: TB           # Top to bottom
+  fontname: Arial
+  splines: ortho        # Square edges (looks professional)
+
+defaults:
+  node:
+    shape: box
+    style: filled
+    fillcolor: white
+    fontname: Arial
+    fontsize: 10
+  edge:
+    arrowhead: none     # No arrows for org charts
+
+nodes:
+  # Executive Level
+  - id: CEO
+    label: "Jane Smith\nCEO"
+    fillcolor: "#ff9999"
+    fontsize: 12
+
+  # Department Heads
+  - id: CTO
+    label: "John Doe\nCTO"
+    fillcolor: "#99ccff"
+
+  - id: CFO
+    label: "Alice Johnson\nCFO"
+    fillcolor: "#99ccff"
+
+  - id: COO
+    label: "Bob Wilson\nCOO"
+    fillcolor: "#99ccff"
+
+  # Engineering Team
+  - id: DevLead
+    label: "Carol Brown\nDev Lead"
+    fillcolor: "#ccffcc"
+
+  - id: QALead
+    label: "Dave Miller\nQA Lead"
+    fillcolor: "#ccffcc"
+
+  # Finance Team
+  - id: Accounting
+    label: "Emma Davis\nAccounting"
+    fillcolor: "#ffffcc"
+
+  - id: Payroll
+    label: "Frank Garcia\nPayroll"
+    fillcolor: "#ffffcc"
+
+  # Operations Team
+  - id: Support
+    label: "Grace Lee\nSupport"
+    fillcolor: "#ffccff"
+
+  - id: Logistics
+    label: "Henry Chen\nLogistics"
+    fillcolor: "#ffccff"
+
+# Reporting relationships
+edges:
+  # Reports to CEO
+  - from: CEO
+    to: CTO
+
+  - from: CEO
+    to: CFO
+
+  - from: CEO
+    to: COO
+
+  # Reports to CTO
+  - from: CTO
+    to: DevLead
+
+  - from: CTO
+    to: QALead
+
+  # Reports to CFO
+  - from: CFO
+    to: Accounting
+
+  - from: CFO
+    to: Payroll
+
+  # Reports to COO
+  - from: COO
+    to: Support
+
+  - from: COO
+    to: Logistics

@@ -1,0 +1,100 @@
+# Simple Data Pipeline Example
+# Perfect for: ETL processes, data flows, system architectures
+#
+# This example shows a basic data pipeline with three stages.
+# Easy to customize for your own data flows!
+
+type: digraph
+name: DataPipeline
+
+graph:
+  rankdir: TB
+  fontname: Helvetica
+
+defaults:
+  node:
+    shape: box
+    style: filled,rounded
+    fillcolor: white
+    fontname: Helvetica
+  edge:
+    fontname: Helvetica
+    fontsize: 10
+
+# Group related nodes into stages using clusters
+clusters:
+  - name: SourceStage
+    label: "1. DATA SOURCES"
+    color: "#e3f2fd"      # Light blue
+    nodes:
+      - id: FileSystem
+        label: "File System\n(CSV, JSON)"
+        fillcolor: "#bbdefb"
+
+      - id: Database
+        label: "Database\n(PostgreSQL)"
+        shape: cylinder
+        fillcolor: "#bbdefb"
+
+      - id: API
+        label: "REST API"
+        fillcolor: "#bbdefb"
+
+  - name: ProcessingStage
+    label: "2. PROCESSING"
+    color: "#f3e5f5"      # Light purple
+    nodes:
+      - id: Validate
+        label: "Validate Data"
+        fillcolor: "#e1bee7"
+
+      - id: Transform
+        label: "Transform &\nEnrich"
+        fillcolor: "#e1bee7"
+
+      - id: Filter
+        label: "Filter &\nDeduplicate"
+        fillcolor: "#e1bee7"
+
+  - name: OutputStage
+    label: "3. OUTPUT"
+    color: "#e8f5e9"      # Light green
+    nodes:
+      - id: DataWarehouse
+        label: "Data\nWarehouse"
+        shape: cylinder
+        fillcolor: "#c8e6c9"
+
+      - id: Dashboard
+        label: "Analytics\nDashboard"
+        fillcolor: "#c8e6c9"
+
+# Connections between all the components
+edges:
+  - from: FileSystem
+    to: Validate
+    label: "read"
+
+  - from: Database
+    to: Validate
+    label: "query"
+
+  - from: API
+    to: Validate
+    label: "fetch"
+
+  - from: Validate
+    to: Transform
+    label: "validated\nrecords"
+
+  - from: Transform
+    to: Filter
+    label: "enriched\ndata"
+
+  - from: Filter
+    to: DataWarehouse
+    label: "load"
+
+  - from: DataWarehouse
+    to: Dashboard
+    label: "query"

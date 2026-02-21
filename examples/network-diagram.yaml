@@ -1,0 +1,143 @@
+# Network Architecture Example
+# Perfect for: infrastructure diagrams, system topologies, cloud architectures
+#
+# This shows a simple web application infrastructure.
+
+type: digraph
+name: NetworkArchitecture
+
+graph:
+  rankdir: TB
+  fontname: Helvetica
+  splines: ortho       # Square edges
+
+defaults:
+  node:
+    shape: box
+    style: filled
+    fillcolor: white
+    fontname: Helvetica
+
+# Group by network zones
+clusters:
+  - name: Internet
+    label: "INTERNET"
+    color: "#ffebee"     # Light red
+    nodes:
+      - id: Users
+        label: "End Users"
+        shape: oval
+        fillcolor: "#ffcdd2"
+
+  - name: DMZ
+    label: "DMZ (Public Zone)"
+    color: "#fff3e0"     # Light orange
+    nodes:
+      - id: LoadBalancer
+        label: "Load Balancer\n(HAProxy)"
+        fillcolor: "#ffe0b2"
+
+      - id: WebServer1
+        label: "Web Server 1\n(Nginx)"
+        fillcolor: "#ffe0b2"
+
+      - id: WebServer2
+        label: "Web Server 2\n(Nginx)"
+        fillcolor: "#ffe0b2"
+
+  - name: AppZone
+    label: "APPLICATION ZONE"
+    color: "#e8eaf6"     # Light indigo
+    nodes:
+      - id: AppServer1
+        label: "App Server 1\n(Node.js)"
+        fillcolor: "#c5cae9"
+
+      - id: AppServer2
+        label: "App Server 2\n(Node.js)"
+        fillcolor: "#c5cae9"
+
+      - id: Cache
+        label: "Redis Cache"
+        shape: cylinder
+        fillcolor: "#c5cae9"
+
+  - name: DataZone
+    label: "DATA ZONE (Private)"
+    color: "#e0f2f1"     # Light teal
+    nodes:
+      - id: Database
+        label: "PostgreSQL\nPrimary"
+        shape: cylinder
+        fillcolor: "#b2dfdb"
+
+      - id: DatabaseReplica
+        label: "PostgreSQL\nReplica"
+        shape: cylinder
+        fillcolor: "#b2dfdb"
+
+      - id: FileStorage
+        label: "File Storage\n(S3)"
+        shape: folder
+        fillcolor: "#b2dfdb"
+
+edges:
+  # User to load balancer
+  - from: Users
+    to: LoadBalancer
+    label: "HTTPS"
+
+  # Load balancer to web servers
+  - from: LoadBalancer
+    to: WebServer1
+    label: "HTTP"
+
+  - from: LoadBalancer
+    to: WebServer2
+    label: "HTTP"
+
+  # Web servers to app servers
+  - from: WebServer1
+    to: AppServer1
+
+  - from: WebServer1
+    to: AppServer2
+
+  - from: WebServer2
+    to: AppServer1
+
+  - from: WebServer2
+    to: AppServer2
+
+  # App servers to cache
+  - from: AppServer1
+    to: Cache
+    label: "read/write"
+
+  - from: AppServer2
+    to: Cache
+    label: "read/write"
+
+  # App servers to database
+  - from: AppServer1
+    to: Database
+    label: "SQL"
+
+  - from: AppServer2
+    to: Database
+    label: "SQL"
+
+  # Database replication
+  - from: Database
+    to: DatabaseReplica
+    label: "replication"
+    style: dashed
+
+  # File storage access
+  - from: AppServer1
+    to: FileStorage
+    label: "store files"
+
+  - from: AppServer2
+    to: FileStorage
+    label: "store files"

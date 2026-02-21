@@ -1,0 +1,116 @@
+{
+  "graph_type": "digraph",
+  "name": "DataPipeline",
+  "graph_attrs": {
+    "rankdir": "TB",
+    "fontname": "Helvetica",
+    "fontsize": "10"
+  },
+  "node_attrs": {
+    "fontname": "Helvetica",
+    "fontsize": "10",
+    "shape": "box",
+    "style": "filled,rounded",
+    "fillcolor": "white"
+  },
+  "edge_attrs": {
+    "fontname": "Helvetica",
+    "fontsize": "9"
+  },
+  "clusters": [
+    {
+      "name": "cluster_Discovery",
+      "label": "Discovery Stage",
+      "attrs": {
+        "style": "filled",
+        "color": "lightgrey"
+      },
+      "nodes": ["ListFiles", "FilterNew", "QueueFiles"]
+    },
+    {
+      "name": "cluster_Processing",
+      "label": "Processing Stage",
+      "attrs": {
+        "style": "filled",
+        "color": "lightblue"
+      },
+      "nodes": ["Download", "Transform", "Load"]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "Start",
+      "label": "Start Loop",
+      "shape": "oval",
+      "fillcolor": "lightgreen"
+    },
+    {
+      "id": "ListFiles",
+      "label": "List S3 Files"
+    },
+    {
+      "id": "FilterNew",
+      "label": "Filter New Files",
+      "shape": "diamond"
+    },
+    {
+      "id": "QueueFiles",
+      "label": "Push to Queue"
+    },
+    {
+      "id": "Download",
+      "label": "Download & Decompress"
+    },
+    {
+      "id": "Transform",
+      "label": "Transform Data"
+    },
+    {
+      "id": "Load",
+      "label": "Load to Database",
+      "shape": "cylinder",
+      "fillcolor": "yellow"
+    },
+    {
+      "id": "Sleep",
+      "label": "Sleep",
+      "shape": "oval"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Start",
+      "to": "ListFiles"
+    },
+    {
+      "from": "ListFiles",
+      "to": "FilterNew"
+    },
+    {
+      "from": "FilterNew",
+      "to": "QueueFiles",
+      "label": "new files"
+    },
+    {
+      "from": "QueueFiles",
+      "to": "Download"
+    },
+    {
+      "from": "Download",
+      "to": "Transform"
+    },
+    {
+      "from": "Transform",
+      "to": "Load"
+    },
+    {
+      "from": "Load",
+      "to": "Sleep"
+    },
+    {
+      "from": "Sleep",
+      "to": "Start",
+      "style": "dashed"
+    }
+  ]
+}

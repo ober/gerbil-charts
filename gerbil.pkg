@@ -1,0 +1,6 @@
+(package: gerbil-charts
+
+(depend: (github: "ober/gerbil-svg")
+         (github: "ober/gerbil-cairo")
+         (github: "mighty-gerbils/gerbil-libyaml")
+         (github: "ober/gerbil-graphviz")))

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The gerbil-charts library now supports creating architecture diagrams, flowcharts, and data pipeline visualizations using Graphviz. This integration allows you to:
+The gerbil-charts library supports creating architecture diagrams, flowcharts, and data pipeline visualizations using Graphviz via native FFI bindings (no external `dot` binary required). This integration allows you to:
 
 1. Generate DOT format graphs from JSON descriptions
 2. Use a Scheme DSL for programmatic graph construction
@@ -15,7 +15,7 @@ The gerbil-charts library now supports creating architecture diagrams, flowchart
 - **`graphviz.ss`**: Core DOT generation and rendering
   - S-expression DSL for building graphs: `digraph`, `graph`, `node`, `edge`, `subgraph`, `attr`
   - JSON → DOT conversion: `json->dot`
-  - DOT rendering via graphviz: `render-dot`, `render-dot-to-file`
+  - DOT rendering via graphviz FFI: `render-dot`, `render-dot-to-file`
   - DOT string generation: `dot->string`
 
 - **`charts/graph.ss`**: High-level graph chart API
@@ -209,8 +209,10 @@ cat pipeline.json | gerbil-charts --type graph output.svg
 
 ## Dependencies
 
-- Graphviz must be installed on the system (`dot`, `neato`, etc. commands)
-- Gerbil packages: `gerbil-svg`, `gerbil-cairo` (for existing chart types)
+- Gerbil packages: `gerbil-svg`, `gerbil-cairo` (for existing chart types), `gerbil-graphviz` (FFI bindings)
+- Graphviz C libraries (libgvc, libcgraph) — install via: `brew install graphviz` or `apt install libgraphviz-dev`
+- No external `dot`/`neato` binaries needed — rendering is done via native FFI calls to the Graphviz C library
+- The static binary (`make static`) bundles Graphviz entirely, requiring zero external dependencies
 
 ## Next Steps
 

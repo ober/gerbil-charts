@@ -21,7 +21,7 @@ A Gerbil Scheme library for creating charts and diagrams.
 
 - **SVG**: Scalable vector graphics (via gerbil-svg)
 - **Cairo**: High-quality rasterization (PNG, PDF) via gerbil-cairo
-- **Graphviz**: DOT language rendering via dot/neato/fdp engines
+- **Graphviz**: DOT language rendering via dot/neato/fdp engines (built-in via FFI, no external binary needed)
 
 ## Installation
 
@@ -126,7 +126,10 @@ The `examples/` directory contains:
 - Gerbil Scheme (v0.18+)
 - gerbil-svg (for SVG backend)
 - gerbil-cairo (for PNG/PDF backends)
-- Graphviz (for diagram generation) - install via: `brew install graphviz` or `apt install graphviz`
+- gerbil-graphviz (for diagram generation, linked via FFI — no external `dot` binary required)
+- Graphviz C libraries (libgvc, libcgraph) — install via: `brew install graphviz` or `apt install libgraphviz-dev`
+
+The static binary (`make static`) bundles all dependencies including Graphviz, producing a single self-contained executable with zero external requirements.
 
 ## Use Cases
 
